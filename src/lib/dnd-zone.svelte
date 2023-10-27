@@ -1,97 +1,67 @@
 <script>
-	import { draggable, dropzone } from './utils/dnd.js';
+	export let items;
 
-	let data = {
-		columns: [
-			{
-				id: 1,
-				label: '📫 Todo'
-			},
-			{
-				id: 2,
-				label: '✅ Done'
+	function handleDragStart(event) {
+		event.dataTransfer.setData('text/plain', event.target.id);
+	}
+
+	function handleDrop(event) {
+		event.preventDefault();
+		const id = event.dataTransfer.getData('text/plain');
+		const target = event.target;
+		const targetIndex = items.findIndex((item) => item.id === Number(target.id));
+		const draggedIndex = items.findIndex((item) => item.id === Number(id));
+		const temp = items[targetIndex];
+		items[targetIndex] = items[draggedIndex];
+		items[draggedIndex] = temp;
+	}
+
+	function handleDragOver(event) {
+		event.preventDefault();
+		const target = event.target;
+		const targetIndex = items.findIndex((item) => item.id === Number(target.id));
+		for (let i = 0; i < items.length; i++) {
+			if (i === targetIndex) {
+				items[i].hovered = true;
+			} else {
+				items[i].hovered = false;
 			}
-		],
-		cards: [
-			{
-				column: 1,
-				id: 'a',
-				title: 'Wash Dishes'
-			},
-			{
-				column: 2,
-				id: 'b',
-				title: 'Code DND Example'
-			}
-		]
-	};
+		}
+	}
 </script>
 
+<h1>Items</h1>
 <ul>
-	{#each data.columns as column}
-		{@const cards = data.cards.filter((c) => c.column === column.id)}
+	{#each items as item}
 		<li
-			class="column"
-			use:dropzone={{
-				on_dropzone(card_id) {
-					const card = data.cards.find((c) => c.id === card_id);
-					card.column = column.id;
-					data = data;
-				}
-			}}
+			draggable="true"
+			on:dragstart={handleDragStart}
+			on:drop={handleDrop}
+			on:dragover={handleDragOver}
+			id={item.id}
 		>
-			<h2>{column.label}</h2>
-			{#if cards.length > 0}
-				<ul class="cards">
-					{#each cards as card}
-						<li use:draggable={card.id}>
-							{card.title}
-						</li>
-					{/each}
-				</ul>
-			{:else}
-				<p>No Cards...</p>
-			{/if}
+			{item.name}
 		</li>
 	{/each}
 </ul>
 
 <style>
 	ul {
-		list-style: none;
+		list-style-type: none;
 		margin: 0;
 		padding: 0;
-		display: flex;
-		gap: 1rem;
 	}
 
 	li {
-		padding: 1rem;
-		background-color: var(--sk-back-1);
-		border: 1px solid black;
-		border-radius: 0.5rem;
-		border-color: var(--sk-back-5);
+		background-color: #f1f1f1;
+		color: black;
+		padding: 8px;
+		margin-bottom: 8px;
+		cursor: move;
+		transition: background-color 0.3s ease-in-out;
 	}
 
-	.column {
-		min-width: 25ch;
-	}
-
-	h2 {
-		margin-block-start: 0;
-		margin-block-end: 0.5rem;
-	}
-
-	.cards {
-		flex-direction: column;
-	}
-
-	.column:global(.droppable) {
-		outline: 0.1rem solid var(--sk-theme-1);
-		outline-offset: 0.25rem;
-	}
-
-	.column:global(.droppable) * {
-		pointer-events: none;
+	li:hover {
+		background-color: #ddd;
 	}
 </style>
