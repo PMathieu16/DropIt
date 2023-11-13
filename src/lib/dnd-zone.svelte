@@ -1,4 +1,7 @@
 <script>
+	import { flip } from 'svelte/animate';
+	import { quintIn } from 'svelte/easing';
+
 	export let items;
 
 	function handleDragStart(event) {
@@ -32,9 +35,10 @@
 
 <h1>Items</h1>
 <ul>
-	{#each items as item}
+	{#each items as item (item.id)}
 		<li
 			draggable="true"
+			animate:flip={{}}
 			on:dragstart={handleDragStart}
 			on:drop={handleDrop}
 			on:dragover={handleDragOver}
