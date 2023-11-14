@@ -1,39 +1,59 @@
 <script>
 	import { flip } from 'svelte/animate';
-	import { quintIn } from 'svelte/easing';
 
 	export let items;
 
-	function handleDragStart(event) {
-		event.dataTransfer.setData('text/plain', event.target.id);
-	}
+	let itemIdBeingDragged = null;
 
-	function handleDrop(event) {
+	const handleDragStart = (event) => {
+		itemIdBeingDragged = event.target.id;
+	};
+
+	const handleDrop = (event) => {
 		event.preventDefault();
-		const id = event.dataTransfer.getData('text/plain');
+		const id = itemIdBeingDragged;
 		const target = event.target;
 		const targetIndex = items.findIndex((item) => item.id === Number(target.id));
 		const draggedIndex = items.findIndex((item) => item.id === Number(id));
-		const temp = items[targetIndex];
-		items[targetIndex] = items[draggedIndex];
-		items[draggedIndex] = temp;
-	}
 
-	function handleDragOver(event) {
+		if (targetIndex !== draggedIndex) {
+			let newItems = [...items];
+			let draggedItem = newItems.splice(draggedIndex, 1)[0];
+			newItems.splice(targetIndex, 0, draggedItem);
+			items = newItems;
+		}
+	};
+
+	const handleDragOver = (event) => {
 		event.preventDefault();
 		const target = event.target;
 		const targetIndex = items.findIndex((item) => item.id === Number(target.id));
-		for (let i = 0; i < items.length; i++) {
-			if (i === targetIndex) {
-				items[i].hovered = true;
+		const draggedIndex = items.findIndex((item) => item.id === Number(itemIdBeingDragged));
+
+		if (targetIndex !== draggedIndex) {
+			let newItems = [...items];
+			let draggedItem = newItems.splice(draggedIndex, 1)[0];
+
+			if (isTopHalf(event, target)) {
+				newItems.splice(targetIndex, 0, draggedItem);
 			} else {
-				items[i].hovered = false;
+				newItems.splice(targetIndex + 1, 0, draggedItem);
 			}
+
+			items = newItems;
 		}
-	}
+	};
+
+	const isTopHalf = (event, target) => {
+		const rect = target.getBoundingClientRect();
+		const y = event.clientY - rect.top;
+		const height = rect.bottom - rect.top;
+		return y < height / 2;
+	};
 </script>
 
 <h1>Items</h1>
+
 <ul>
 	{#each items as item (item.id)}
 		<li
@@ -51,6 +71,9 @@
 
 <style>
 	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
 		list-style-type: none;
 		margin: 0;
 		padding: 0;
@@ -60,7 +83,6 @@
 		background-color: #f1f1f1;
 		color: black;
 		padding: 8px;
-		margin-bottom: 8px;
 		cursor: move;
 		transition: background-color 0.3s ease-in-out;
 	}
