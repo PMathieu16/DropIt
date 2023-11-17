@@ -2,9 +2,9 @@
 	import DndZone from '$lib/dnd-zone.svelte';
 
 	let data = [
-		{ id: 1, name: 'First Item'},
-		{ id: 2, name: 'Second Item'},
-		{ id: 3, name: 'Third Item'}
+		{ id: 1, name: 'First Item' },
+		{ id: 2, name: 'Second Item' },
+		{ id: 3, name: 'Third Item' }
 	];
 </script>
 
