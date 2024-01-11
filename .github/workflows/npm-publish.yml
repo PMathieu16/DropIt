@@ -1,0 +1,31 @@
+name: Deploy package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Increment version and push changes
+      - run: |
+          npm version patch --tag dropit-v%s -m "Bump version to %s [skip ci]"
+          git push
+
+  publish-npm:
+    needs: update-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
