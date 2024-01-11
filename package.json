@@ -1,6 +1,11 @@
 {
-	"name": "dropit",
-	"version": "0.0.1",
+	"name": "svelte-dropit",
+	"version": "0.1.1",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/PMathieu16/DropIt.git"
+	  },
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
