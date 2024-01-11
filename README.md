@@ -1,58 +1,94 @@
-# create-svelte
+<div align="center">
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+<img src="https://i.ibb.co/3040tZK/logo.png" alt="" height="128px" />
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+# DropIt
 
-## Creating a project
+Drag and drop librairie for svelte application • [npm](https://www.npmjs.com/package/svelte-dropit)
 
-If you're seeing this, you've probably already done this step. Congrats!
+</div>
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+<img src="https://i.ibb.co/bLkK770/dropit.png">
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+---
 
-## Developing
+## About
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+DropIt is a study project with the potential to become a serious project.
+We are keen to receive feedback on it or ideas for new features.
 
-```bash
-npm run dev
+> [!NOTE]  
+> The library is currently under development and functionality is limited.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## Usage
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+### Installation
 
-## Building
-
-To build your library:
+To use DropIt in your Svelte application, you need to install it first. You can do this via npm:
 
 ```bash
-npm run package
+npm install svelte-dropit
 ```
 
-To create a production version of your showcase app:
+### Dragging Items
 
-```bash
-npm run build
+DropIt provides a simple API to enable dragging behavior for DOM nodes. Import the drag function and use it as follows:
+
+```js
+import { drag } from 'svelte-dropit';
+
+// Example usage in Svelte component
+<script>
+    import { drag } from 'svelte-dropit';
+
+    let items = [...]; // Your array of items
+
+    const onDrag = () => {
+        // Callback function when dragging occurs
+        // You can add your custom logic here
+    };
+</script>
+
+<ul>
+    {#each items as item (item.id)}
+        <li use:drag={{ item, onDrag }}>
+            <!-- Your item content -->
+            <h1>{item.name}</h1>
+            <p>{item.description}</p>
+        </li>
+    {/each}
+</ul>
 ```
 
-You can preview the production build with `npm run preview`.
+### Dropping Items
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+To handle the drop action, use the drop function:
 
-## Publishing
+```js
+import { drop } from 'svelte-dropit';
 
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
+// Example usage in Svelte component
+<script>
+    import { drop } from 'svelte-dropit';
 
-To publish your library to [npm](https://www.npmjs.com):
+    const onDrop = (colName, item) => {
+        // Callback function when an item is dropped
+        // You can update the item's column or perform any other action
+        console.log(item, colName);
+    };
+</script>
 
-```bash
-npm publish
+<ul use:drop={{ colName: 'yourColName', onDrop }}>
+    <!-- Droppable area content -->
+</ul>
 ```
+
+Make sure to replace 'yourColName' with the appropriate column name.
+
+### Demo
+
+Check out our [doc with the demo](https://drop-it-doc.vercel.app/)
+
+## License
+
+[MIT](./LICENSE) © Mathieu Parinet and Jacky Truong
