@@ -2,10 +2,24 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
+		<title>DropIt</title>
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 	</head>
+	<style>
+		@font-face {
+			font-family: 'Lato';
+			font-style: normal;
+			font-weight: 400;
+			src: url('https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap');
+		}
+
+		body {
+			font-family: 'Lato', sans-serif;
+			background-color: #172554;
+		}
+	</style>
 	<body data-sveltekit-preload-data="hover">
 		<div>%sveltekit.body%</div>
 	</body>

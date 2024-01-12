@@ -19,7 +19,8 @@ Drag and drop librairie for svelte application
 DropIt is a study project with the potential to become a serious project.
 We are keen to receive feedback on it or ideas for new features.
 
-The library is currently under development and functionality is limited.
+> [!NOTE]  
+> The library is currently under development and functionality is limited.
 
 ## Usage
 

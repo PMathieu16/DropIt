@@ -1,8 +1,9 @@
 name: Deploy package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
 
 jobs:
   update-version:
@@ -13,9 +14,8 @@ jobs:
         with:
           node-version: 16
       - name: Increment version and push changes
-      - run: |
-          npm version patch --tag dropit-v%s -m "Bump version to %s [skip ci]"
-          git push
+      - run: npm version patch --tag dropit-v%s -m "Bump version to %s [skip ci]"
+      - run: git push
 
   publish-npm:
     needs: update-version
